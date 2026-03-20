@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AssetFlow – Register</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary: #0f4c81; --primary-light: #1a6cb5; --accent: #00c2a8;
+      --dark: #0a1628; --surface: #111e35; --surface2: #162240;
+      --text: #e8eef7; --text-muted: #7a90b5; --border: rgba(255,255,255,0.08);
+    }
+    * { box-sizing: border-box; }
+    body { font-family: 'Sora', sans-serif; background: var(--dark); min-height: 100vh; color: var(--text); }
+    .topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 2rem; display: flex; align-items: center; gap: 10px; }
+    .topbar .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, var(--accent), var(--primary-light)); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; }
+    .topbar .brand { font-weight: 700; font-size: 1.1rem; } .topbar .brand span { color: var(--accent); }
+    .page-wrap { display: flex; justify-content: center; align-items: flex-start; padding: 3rem 1rem; min-height: calc(100vh - 65px); }
+    .reg-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem; width: 100%; max-width: 700px; }
+    .reg-card h2 { font-size: 1.6rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .reg-card .sub { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 2rem; }
+    .step-dots { display: flex; gap: 8px; margin-bottom: 2rem; }
+    .step-dot { height: 4px; flex: 1; border-radius: 4px; background: var(--surface2); transition: background 0.3s; }
+    .step-dot.active { background: var(--accent); }
+    .form-label { font-size: 0.75rem; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: block; }
+    .form-ctrl {
+      width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px;
+      padding: 11px 14px; color: var(--text); font-family: 'Sora', sans-serif; font-size: 0.9rem; outline: none; transition: border-color 0.2s;
+    }
+    .form-ctrl:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,194,168,0.1); }
+    .form-ctrl::placeholder { color: var(--text-muted); }
+    select.form-ctrl option { background: var(--surface2); }
+    .pw-strength { margin-top: 8px; }
+    .pw-bar { height: 4px; border-radius: 4px; background: var(--surface2); overflow: hidden; margin-bottom: 4px; }
+    .pw-fill { height: 100%; border-radius: 4px; transition: width 0.3s, background 0.3s; width: 0%; }
+    .pw-label { font-size: 0.75rem; color: var(--text-muted); }
+    .field-err { font-size: 0.75rem; color: #ff5c5c; margin-top: 4px; display: none; }
+    .field-err.show { display: block; }
+    .btn-next {
+      background: linear-gradient(135deg, var(--primary-light), var(--accent)); border: none;
+      border-radius: 12px; padding: 12px 28px; color: white; font-family: 'Sora', sans-serif;
+      font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: opacity 0.2s;
+    }
+    .btn-next:hover { opacity: 0.9; }
+    .btn-back { background: transparent; border: 1px solid var(--border); border-radius: 12px; padding: 12px 28px; color: var(--text-muted); font-family: 'Sora', sans-serif; font-size: 0.9rem; cursor: pointer; }
+    .btn-back:hover { border-color: var(--text-muted); }
+    .success-screen { text-align: center; padding: 2rem 0; }
+    .success-icon { width: 80px; height: 80px; background: rgba(0,194,168,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 36px; color: var(--accent); margin: 0 auto 1.5rem; }
+    .step-section { display: none; } .step-section.active { display: block; }
+    .input-wrap { position: relative; }
+    .i-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 15px; }
+    .input-wrap .form-ctrl { padding-left: 36px; }
+    a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+<div class="topbar">
+  <div class="logo-icon"><i class="bi bi-grid-3x3-gap-fill"></i></div>
+  <span class="brand">Asset<span>Flow</span></span>
+</div>
+
+<div class="page-wrap">
+  <div class="reg-card">
+    <h2>Create your account</h2>
+    <p class="sub">Set up your AssetFlow employee account in a few steps</p>
+
+    <div class="step-dots">
+      <div class="step-dot active" id="dot0"></div>
+      <div class="step-dot" id="dot1"></div>
+      <div class="step-dot" id="dot2"></div>
+    </div>
+
+    <!-- Step 1: Personal Info -->
+    <div class="step-section active" id="step0">
+      <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:1.2rem;">Step 1 of 3 — Personal Information</p>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Full Name</label>
+          <div class="input-wrap">
+            <i class="bi bi-person i-icon"></i>
+            <input type="text" class="form-ctrl" id="reg-name" placeholder="Riya Sharma"/>
+          </div>
+          <div class="field-err" id="err-name">Please enter your full name.</div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Email address</label>
+          <div class="input-wrap">
+            <i class="bi bi-envelope i-icon"></i>
+            <input type="email" class="form-ctrl" id="reg-email" placeholder="riya@hexaware.com"/>
+          </div>
+          <div class="field-err" id="err-email">Please enter a valid email.</div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Phone Number</label>
+          <div class="input-wrap">
+            <i class="bi bi-phone i-icon"></i>
+            <input type="tel" class="form-ctrl" id="reg-phone" placeholder="+91 98765 43210"/>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Department</label>
+          <select class="form-ctrl" id="reg-dept">
+            <option value="">Select department</option>
+            <option>Engineering</option>
+            <option>Design</option>
+            <option>HR</option>
+            <option>Finance</option>
+            <option>Operations</option>
+          </select>
+          <div class="field-err" id="err-dept">Please select your department.</div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-end mt-4">
+        <button class="btn-next" onclick="nextStep(0)">Continue <i class="bi bi-arrow-right ms-1"></i></button>
+      </div>
+    </div>
+
+    <!-- Step 2: Account Setup -->
+    <div class="step-section" id="step1">
+      <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:1.2rem;">Step 2 of 3 — Account Setup</p>
+      <div class="row g-3">
+        <div class="col-12">
+          <label class="form-label">Choose Username</label>
+          <div class="input-wrap">
+            <i class="bi bi-at i-icon"></i>
+            <input type="text" class="form-ctrl" id="reg-username" placeholder="riya.sharma"/>
+          </div>
+          <div class="field-err" id="err-username">Username required.</div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-ctrl" id="reg-pw" placeholder="Create a strong password" oninput="checkPwStrength(this.value)"/>
+          <div class="pw-strength">
+            <div class="pw-bar"><div class="pw-fill" id="pw-fill"></div></div>
+            <span class="pw-label" id="pw-label">Enter a password</span>
+          </div>
+          <div class="field-err" id="err-pw">Password must be at least 8 characters.</div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Confirm Password</label>
+          <input type="password" class="form-ctrl" id="reg-pw2" placeholder="Re-enter password"/>
+          <div class="field-err" id="err-pw2">Passwords do not match.</div>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Password requirements</label>
+          <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:4px;">
+            <span class="pw-req" id="req-len" style="font-size:0.75rem;color:var(--text-muted);"><i class="bi bi-circle me-1"></i>8+ characters</span>
+            <span class="pw-req" id="req-upper" style="font-size:0.75rem;color:var(--text-muted);"><i class="bi bi-circle me-1"></i>Uppercase</span>
+            <span class="pw-req" id="req-num" style="font-size:0.75rem;color:var(--text-muted);"><i class="bi bi-circle me-1"></i>Number</span>
+            <span class="pw-req" id="req-spec" style="font-size:0.75rem;color:var(--text-muted);"><i class="bi bi-circle me-1"></i>Special char</span>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-between mt-4">
+        <button class="btn-back" onclick="prevStep(1)"><i class="bi bi-arrow-left me-1"></i> Back</button>
+        <button class="btn-next" onclick="nextStep(1)">Continue <i class="bi bi-arrow-right ms-1"></i></button>
+      </div>
+    </div>
+
+    <!-- Step 3: Review -->
+    <div class="step-section" id="step2">
+      <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:1.2rem;">Step 3 of 3 — Review & Submit</p>
+      <div style="background:var(--surface2);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem;">
+        <p style="font-size:0.75rem;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:1rem;">Your Details</p>
+        <div class="row g-2">
+          <div class="col-6"><span style="font-size:0.75rem;color:var(--text-muted);">Name</span><br/><span id="rev-name" style="font-size:0.9rem;">—</span></div>
+          <div class="col-6"><span style="font-size:0.75rem;color:var(--text-muted);">Email</span><br/><span id="rev-email" style="font-size:0.9rem;">—</span></div>
+          <div class="col-6 mt-2"><span style="font-size:0.75rem;color:var(--text-muted);">Username</span><br/><span id="rev-user" style="font-size:0.9rem;">—</span></div>
+          <div class="col-6 mt-2"><span style="font-size:0.75rem;color:var(--text-muted);">Department</span><br/><span id="rev-dept" style="font-size:0.9rem;">—</span></div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:10px;font-size:0.85rem;color:var(--text-muted);margin-bottom:1.5rem;">
+        <input type="checkbox" id="terms" style="margin-top:3px;accent-color:var(--accent);"/>
+        <label for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+      </div>
+      <div class="field-err show" id="err-terms" style="display:none!important;"></div>
+      <div class="d-flex justify-content-between">
+        <button class="btn-back" onclick="prevStep(2)"><i class="bi bi-arrow-left me-1"></i> Back</button>
+        <button class="btn-next" onclick="submitReg()"><i class="bi bi-check2 me-1"></i> Create Account</button>
+      </div>
+    </div>
+
+    <!-- Success -->
+    <div class="step-section" id="step-success">
+      <div class="success-screen">
+        <div class="success-icon"><i class="bi bi-check-lg"></i></div>
+        <h3 style="font-size:1.4rem;font-weight:700;margin-bottom:0.5rem;">Account created!</h3>
+        <p style="color:var(--text-muted);margin-bottom:2rem;">Your AssetFlow employee account is ready. Sign in to get started.</p>
+        <a href="login.html" class="btn-next" style="display:inline-block;text-decoration:none;">Go to Login <i class="bi bi-arrow-right ms-1"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentStep = 0;
+
+function showStep(n) {
+  document.querySelectorAll('.step-section').forEach((s,i) => s.classList.toggle('active', i === n));
+  document.querySelectorAll('.step-dot').forEach((d,i) => d.classList.toggle('active', i <= n));
+}
+
+function nextStep(from) {
+  if (from === 0) {
+    const name = document.getElementById('reg-name').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const dept = document.getElementById('reg-dept').value;
+    let ok = true;
+    document.getElementById('err-name').classList.toggle('show', !name); if (!name) ok = false;
+    document.getElementById('err-email').classList.toggle('show', !email || !email.includes('@')); if (!email || !email.includes('@')) ok = false;
+    document.getElementById('err-dept').classList.toggle('show', !dept); if (!dept) ok = false;
+    if (!ok) return;
+  }
+  if (from === 1) {
+    const un = document.getElementById('reg-username').value.trim();
+    const pw = document.getElementById('reg-pw').value;
+    const pw2 = document.getElementById('reg-pw2').value;
+    let ok = true;
+    document.getElementById('err-username').classList.toggle('show', !un); if (!un) ok = false;
+    document.getElementById('err-pw').classList.toggle('show', pw.length < 8); if (pw.length < 8) ok = false;
+    document.getElementById('err-pw2').classList.toggle('show', pw !== pw2); if (pw !== pw2) ok = false;
+    if (!ok) return;
+    // Populate review
+    document.getElementById('rev-name').textContent = document.getElementById('reg-name').value;
+    document.getElementById('rev-email').textContent = document.getElementById('reg-email').value;
+    document.getElementById('rev-user').textContent = '@' + un;
+    document.getElementById('rev-dept').textContent = document.getElementById('reg-dept').value;
+  }
+  currentStep = from + 1;
+  showStep(currentStep);
+}
+
+function prevStep(from) { currentStep = from - 1; showStep(currentStep); }
+
+function submitReg() {
+  if (!document.getElementById('terms').checked) {
+    alert('Please accept the Terms of Service to continue.');
+    return;
+  }
+  showStep(3); // success
+  document.querySelectorAll('.step-dot').forEach(d => d.classList.add('active'));
+}
+
+function checkPwStrength(pw) {
+  const fill = document.getElementById('pw-fill');
+  const label = document.getElementById('pw-label');
+  const checks = { len: pw.length >= 8, upper: /[A-Z]/.test(pw), num: /[0-9]/.test(pw), spec: /[^a-zA-Z0-9]/.test(pw) };
+  const score = Object.values(checks).filter(Boolean).length;
+
+  ['len','upper','num','spec'].forEach(k => {
+    const el = document.getElementById('req-' + k);
+    el.innerHTML = `<i class="bi bi-${checks[k] ? 'check-circle-fill" style="color:var(--accent)' : 'circle'} me-1"></i>${el.textContent.trim()}`;
+  });
+
+  const colors = ['', '#ff5c5c', '#ff9f43', '#00c2a8', '#00c2a8'];
+  const labels = ['', 'Too weak', 'Weak', 'Good', 'Strong'];
+  fill.style.width = (score * 25) + '%';
+  fill.style.background = colors[score] || '';
+  label.textContent = labels[score] || '';
+}
+</script>
+</body>
+</html>
